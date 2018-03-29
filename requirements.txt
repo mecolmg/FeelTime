@@ -1,0 +1,5 @@
+pip install cognitive_face
+pip install python-dotenv
+pip install opencv-python
+pip install numpy
+pip install scipy
