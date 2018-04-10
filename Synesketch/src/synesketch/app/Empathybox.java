@@ -46,8 +46,6 @@ import com.mongodb.client.result.UpdateResult;
 import java.util.ArrayList;
 import java.util.List;
 
-
-
 public class Empathybox {
 
 	private JFrame jFrame = null; 
@@ -60,10 +58,13 @@ public class Empathybox {
 
 	private JTextArea jTextArea = null;
 	
-	private int dim = 300;
+	private int dim = 500;
 	
 	private Clip c = null;
-	
+
+	private MongoClient mongoClient = new MongoClient( "localhost" , 27017 );
+	private MongoDatabase database = mongoClient.getDatabase("feeltime");
+
 	private JFrame getJFrame() {
 		if (jFrame == null) {
 			jFrame = new JFrame();
@@ -122,7 +123,12 @@ public class Empathybox {
 				public void keyPressed(java.awt.event.KeyEvent e) {
 					try {
 						if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-							String text = jTextArea.getText().trim();
+							System.out.println("Requesting Emotion");
+							MongoCollection<Document> collection = database.getCollection("display1");
+							Document req = collection.find().first();
+							System.out.println(req);
+							String text = req.get("Emotion").toString();
+//								String text = jTextArea.getText().trim();
 							playSound(text);
 							appletPanel.fireSynesthesiator(text);
 							jTextArea.setText(null);

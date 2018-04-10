@@ -41,7 +41,7 @@ while rval:
         maxem = ""
         maxval = 0.0
         for em, val in face['faceAttributes']['emotion'].items():
-          if val > maxval:
+          if val > maxval and (em != 'neutral' or val > 0.9):
             maxval = val
             maxem = em
           cv2.putText(frame, "%s: %f" % (em.capitalize(), val),
