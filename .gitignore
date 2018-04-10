@@ -1,3 +1,4 @@
 config.py
 *.pyc
 tmp_image.jpg
+db

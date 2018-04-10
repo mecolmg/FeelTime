@@ -1,6 +1,11 @@
 import cv2
 import cognitive_face as CF
 import config as env
+import pymongo
+
+from pymongo import MongoClient
+client = MongoClient('localhost', 27017)
+db = client['feeltime']
 
 FACE_API_KEY = env.FACE_API_KEY # defined in config.py
 CF.Key.set(FACE_API_KEY)
@@ -33,13 +38,19 @@ while rval:
             (255,0,0),
             3)
         yidx = 1
+        maxem = ""
+        maxval = 0.0
         for em, val in face['faceAttributes']['emotion'].items():
+          if val > maxval:
+            maxval = val
+            maxem = em
           cv2.putText(frame, "%s: %f" % (em.capitalize(), val),
               (0, yidx * 32),
               cv2.FONT_HERSHEY_PLAIN,
               2.0,
               (0, 0, 255))
           yidx += 1
+        db.display1.update({}, {"Emotion":maxem, "Value":maxval}, upsert=True)
       cv2.imshow("request", frame)
       print(faces)
     if key == 27: # exit on ESC
