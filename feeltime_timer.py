@@ -39,5 +39,5 @@ while rval:
             maxem = em
           maxval = val
       db.display1.update({}, {"Emotion":maxem, "Value":maxval}, upsert=True)
-    time.sleep(5)
+    time.sleep(3)
 vc.release()

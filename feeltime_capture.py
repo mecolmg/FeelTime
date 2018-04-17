@@ -2,6 +2,7 @@ import cv2
 import cognitive_face as CF
 import config as env
 import pymongo
+import time
 
 from pymongo import MongoClient
 client = MongoClient('localhost', 27017)
@@ -55,6 +56,7 @@ while rval:
       print(faces)
     if key == 27: # exit on ESC
         break
+    time.sleep(1)
 vc.release()
 cv2.destroyWindow("preview")
 cv2.destroyWindow("request")
