@@ -76,7 +76,7 @@ public class Hooloovoo extends PApplet  {
 				colorMode(HSB, 1.0f);
 			}	
 		}
-		saveFrame();
+//		saveFrame();
 		//colorMode(HSB, 1.0f);
 		delay(delay);
 	}

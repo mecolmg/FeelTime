@@ -5,6 +5,7 @@
  */
 package synesketch.app;
 
+import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
 import java.io.IOException;
@@ -17,11 +18,11 @@ import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.*;
 
+import javafx.application.Application;
+import org.w3c.dom.css.Rect;
 import synesketch.gui.EmpathyPanel;
 
 import javax.swing.JScrollPane;
-import java.awt.BorderLayout;
-import java.awt.FlowLayout;
 
 import javax.swing.JTextArea;
 import javax.swing.BorderFactory;
@@ -46,9 +47,12 @@ import com.mongodb.client.result.UpdateResult;
 import java.util.ArrayList;
 import java.util.List;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 public class Empathybox {
 
-	private JFrame jFrame = null; 
+	private JFrame jFrame = null;
 
 	private JPanel jContentPane = null;
 
@@ -58,20 +62,34 @@ public class Empathybox {
 
 	private JTextArea jTextArea = null;
 	
-	private int dim = 500;
+	private int dim = 900;
 	
 	private Clip c = null;
 
 	private MongoClient mongoClient = new MongoClient( "localhost" , 27017 );
 	private MongoDatabase database = mongoClient.getDatabase("feeltime");
+	private GraphicsDevice device = GraphicsEnvironment
+			.getLocalGraphicsEnvironment().getScreenDevices()[0];
+
+	public Empathybox() {
+		initialPlaySound();
+	}
 
 	private JFrame getJFrame() {
 		if (jFrame == null) {
 			jFrame = new JFrame();
+			if (false && device.isFullScreenSupported()) {
+				device.setFullScreenWindow(jFrame);
+				Rectangle bounds = device.getDefaultConfiguration().getBounds();
+				dim = bounds.height;
+				jFrame.setSize(bounds.width, bounds.height);
+				System.out.printf("%d %d\n", bounds.width, bounds.height);
+			} else {
+				jFrame.setSize(dim, dim);
+			}
 			jFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 			//jFrame.setSize(dim, (int) Math.round(dim * 1.618));
-			jFrame.setSize(dim, dim + 150);
-			jFrame.setLocation(400, 100);
+//			jFrame.setLocation(400, 100);
 			FlowLayout flowLayout = new FlowLayout();
 			jFrame.setLayout(flowLayout);
 			jFrame.setContentPane(getJContentPane());
@@ -86,7 +104,7 @@ public class Empathybox {
 			jContentPane = new JPanel();
 			jContentPane.setLayout(layout);
 			jContentPane.add(getAppletPanel(), BorderLayout.NORTH);
-			jContentPane.add(getJScrollPane(), BorderLayout.CENTER);
+//			jContentPane.add(getJScrollPane(), BorderLayout.CENTER);
 		}
 		return jContentPane;
 	}
@@ -118,7 +136,6 @@ public class Empathybox {
 			jTextArea = new JTextArea();
 			
 			
-			initialPlaySound();
 			jTextArea.addKeyListener(new java.awt.event.KeyAdapter() {
 				public void keyPressed(java.awt.event.KeyEvent e) {
 					try {
@@ -192,11 +209,38 @@ public class Empathybox {
 		}
 	}
 
+	public void getEmotionFromDB() {
+		String text = "disgust";
+		System.out.println("Requesting Emotion from DB");
+		try {
+			MongoCollection<Document> collection = database.getCollection("display1");
+			Document req = collection.find().first();
+			text = req.get("Emotion").toString();
+		} catch (Exception e) {
+			System.err.println("Couldn't connect to DB");
+		}
+		try {
+			appletPanel.fireSynesthesiator(text);
+			this.playSound(text);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
 	public static void main(String[] args) {
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
 				Empathybox application = new Empathybox();
-				application.getJFrame().setVisible(true);
+				JFrame frame = application.getJFrame();
+				frame.setVisible(true);
+
+				Timer t = new Timer();
+				t.scheduleAtFixedRate(new TimerTask() {
+					@Override
+					public void run() {
+						application.getEmotionFromDB();
+					}
+				},0,1000);
 			}
 		});
 	}

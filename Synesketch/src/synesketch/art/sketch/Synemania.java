@@ -20,6 +20,7 @@ package synesketch.art.sketch;
 
 import processing.core.PApplet;
 
+import processing.core.PGraphics;
 import synesketch.*;
 import synesketch.art.util.SynesketchPalette;
 import synesketch.emotion.*;
@@ -38,11 +39,14 @@ public class Synemania extends PApplet {
 	int maxDisgusties = 900;
 	int maxNeutrals = 30;
 	
-	EmotionalState currentEmotionalState = new EmotionalState(); 
+	EmotionalState currentEmotionalState = new EmotionalState();
+	int currentEmotion;
 	
 	SynesketchPalette palette = new SynesketchPalette("standard");
 	
 	SynesthetiatorEmotion syne;
+
+	PGraphics recorder;
 	
 	Particle neutrals[] = new NeutralParticle[maxNeutrals];
 	Particle happies[] = new HappyParticle[maxHappies];
@@ -70,6 +74,8 @@ public class Synemania extends PApplet {
 	}
 	
 	public void setup() {
+		recorder = this.createGraphics(dim, dim, P3D);
+		this.beginRecord(recorder);
 		size(dim, dim, P3D);
 		background(255);
 		noStroke();
@@ -112,7 +118,9 @@ public class Synemania extends PApplet {
 			getCurrentParticles(currentEmotionalState.getStrongestEmotion());
 	}
 	
-	public void draw() { 
+	public void draw() {
+//		noStroke();
+//		rect(0.0f,0.0f, (float) dim, (float) dim);
 		Emotion strongest = 
 			currentEmotionalState.getStrongestEmotion();
 		float weight = (float) strongest.getWeight();
@@ -130,7 +138,10 @@ public class Synemania extends PApplet {
 	}
 	
 	public Particle[] getCurrentParticles(Emotion e) {
-		int currentEmotion = e.getType();
+		if (currentEmotion != e.getType()) {
+			background(255);
+		}
+		currentEmotion = e.getType();
 		if (currentEmotion == Emotion.HAPPINESS) {
 			return happies;
 		} else if (currentEmotion == Emotion.SADNESS) {
