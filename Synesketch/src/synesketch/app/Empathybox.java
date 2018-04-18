@@ -14,6 +14,7 @@ import java.net.URL;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
+import javax.sound.sampled.FloatControl;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.*;
@@ -70,7 +71,9 @@ public class Empathybox {
 	private MongoDatabase database = mongoClient.getDatabase("feeltime");
 	private GraphicsDevice device = GraphicsEnvironment
 			.getLocalGraphicsEnvironment().getScreenDevices()[0];
-
+	
+	String currentEmotion = "";
+	
 	public Empathybox() {
 		initialPlaySound();
 	}
@@ -138,6 +141,7 @@ public class Empathybox {
 			
 			jTextArea.addKeyListener(new java.awt.event.KeyAdapter() {
 				public void keyPressed(java.awt.event.KeyEvent e) {
+					
 					try {
 						if (e.getKeyCode() == KeyEvent.VK_ENTER) {
 							System.out.println("Requesting Emotion");
@@ -145,8 +149,14 @@ public class Empathybox {
 							Document req = collection.find().first();
 							System.out.println(req);
 							String text = req.get("Emotion").toString();
+							System.out.println("current emotion:" + currentEmotion + "  text: " + text);
+							if (currentEmotion.equals("") || !text.equals(currentEmotion)) {
+								currentEmotion = text;	
+								playSound(text);
+							}
+							
 //								String text = jTextArea.getText().trim();
-							playSound(text);
+							
 							appletPanel.fireSynesthesiator(text);
 							jTextArea.setText(null);
 						}
@@ -172,6 +182,7 @@ public class Empathybox {
 			c = AudioSystem.getClip();
 			c.open(audioIn);
 			c.start();
+			System.out.println("in here");
 			c.loop(Clip.LOOP_CONTINUOUSLY);
 			
 		} catch (UnsupportedAudioFileException e) {
@@ -187,7 +198,19 @@ public class Empathybox {
 	}
 	private void playSound(String emotion){
 		if (c.isRunning()){
+			
+			for (int i = 0; i <50; i++) {
+				FloatControl gainControl = (FloatControl)c.getControl(FloatControl.Type.MASTER_GAIN);
+				gainControl.setValue(i * -1f);
+				try {
+					Thread.sleep(3);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
 			c.stop();
+			
 		}
 		String input = "music_files/" + emotion + ".wav";
 		try {
@@ -195,6 +218,16 @@ public class Empathybox {
 			c = AudioSystem.getClip();
 			c.open(audioIn);
 			c.start();
+			for (int i = -50; i < 0; i++) {
+				FloatControl gainControl = (FloatControl)c.getControl(FloatControl.Type.MASTER_GAIN);
+				gainControl.setValue(i);
+				try {
+					Thread.sleep(3);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
 			c.loop(Clip.LOOP_CONTINUOUSLY);
 			
 		} catch (UnsupportedAudioFileException e) {
@@ -221,7 +254,11 @@ public class Empathybox {
 		}
 		try {
 			appletPanel.fireSynesthesiator(text);
-			this.playSound(text);
+			System.out.println("current emotion:" + currentEmotion + "  text: " + text);
+			if (currentEmotion.equals("") || !text.equals(currentEmotion)) {
+				currentEmotion = text;	
+				playSound(text);
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -230,7 +267,7 @@ public class Empathybox {
 	public static void main(String[] args) {
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
-				Empathybox application = new Empathybox();
+				final Empathybox application = new Empathybox();
 				JFrame frame = application.getJFrame();
 				frame.setVisible(true);
 
