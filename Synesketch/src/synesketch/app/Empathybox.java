@@ -7,10 +7,12 @@ package synesketch.app;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 
+import javax.imageio.ImageIO;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
@@ -28,6 +30,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.BorderFactory;
 import javax.swing.border.BevelBorder;
+import javax.swing.border.LineBorder;
 
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientURI;
@@ -37,7 +40,11 @@ import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.MongoCollection;
 
 import org.bson.Document;
-import java.util.Arrays;
+
+import java.util.*;
+import java.util.List;
+import java.util.Timer;
+
 import com.mongodb.Block;
 
 import com.mongodb.client.MongoCursor;
@@ -45,11 +52,6 @@ import static com.mongodb.client.model.Filters.*;
 import com.mongodb.client.result.DeleteResult;
 import static com.mongodb.client.model.Updates.*;
 import com.mongodb.client.result.UpdateResult;
-import java.util.ArrayList;
-import java.util.List;
-
-import java.util.Timer;
-import java.util.TimerTask;
 
 public class Empathybox {
 
@@ -62,7 +64,13 @@ public class Empathybox {
 	private JScrollPane jScrollPane = null;
 
 	private JTextArea jTextArea = null;
-	
+
+	private JLabel picLabel = null, questionLabel = null, reactionLabel = null;
+	private int imageNumber = 0;
+	private Random r = new Random();
+
+
+
 	private int dim = 900;
 	
 	private Clip c = null;
@@ -88,26 +96,45 @@ public class Empathybox {
 				jFrame.setSize(bounds.width, bounds.height);
 				System.out.printf("%d %d\n", bounds.width, bounds.height);
 			} else {
-				jFrame.setSize(dim, dim);
+				jFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+				jFrame.setUndecorated(true);
 			}
 			jFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-			//jFrame.setSize(dim, (int) Math.round(dim * 1.618));
-//			jFrame.setLocation(400, 100);
-			FlowLayout flowLayout = new FlowLayout();
-			jFrame.setLayout(flowLayout);
-			jFrame.setContentPane(getJContentPane());
+			jFrame.setLayout(new BorderLayout(0,0));
+			final BufferedImage image;
+			BorderLayout spLayout = new BorderLayout();
+			JPanel sidePanel = new JPanel(spLayout);
+			picLabel = new JLabel();
+			picLabel.setHorizontalAlignment(JLabel.CENTER);
+			try {
+				image = ImageIO.read(new File("emotion_images/0.jpg").getAbsoluteFile());
+				picLabel.setIcon(new ImageIcon(image.getScaledInstance(525, 525, Image.SCALE_FAST)));
+				sidePanel.add(picLabel, BorderLayout.PAGE_START);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			questionLabel = new JLabel("How does this image make you feel?");
+			questionLabel.setHorizontalAlignment(JLabel.CENTER);
+			questionLabel.setFont(new Font(Font.SERIF, Font.PLAIN, 24));
+
+			reactionLabel = new JLabel();
+			reactionLabel.setHorizontalAlignment(JLabel.CENTER);
+			sidePanel.add(questionLabel, BorderLayout.CENTER);
+			sidePanel.add(reactionLabel, BorderLayout.PAGE_END);
+
+			jFrame.add(getAppletPanel(), BorderLayout.LINE_START);
+			jFrame.add(sidePanel, BorderLayout.CENTER);
 			jFrame.setTitle("FeelTime");
 		}
 		return jFrame;
 	}
-
+//
 	private JPanel getJContentPane() {
 		if (jContentPane == null) {
-			BorderLayout layout = new BorderLayout();
+			FlowLayout layout = new FlowLayout();
 			jContentPane = new JPanel();
 			jContentPane.setLayout(layout);
 			jContentPane.add(getAppletPanel(), BorderLayout.NORTH);
-//			jContentPane.add(getJScrollPane(), BorderLayout.CENTER);
 		}
 		return jContentPane;
 	}
@@ -116,6 +143,7 @@ public class Empathybox {
 		if (appletPanel == null) {
 			try {
 				appletPanel = new EmpathyPanel(dim, "Synemania", "synesketch.emotion.SynesthetiatorEmotion");
+				appletPanel.setSize(dim, dim);
 			} catch (Exception e2) {
 				e2.printStackTrace();
 			}
@@ -154,9 +182,6 @@ public class Empathybox {
 								currentEmotion = text;	
 								playSound(text);
 							}
-							
-//								String text = jTextArea.getText().trim();
-							
 							appletPanel.fireSynesthesiator(text);
 							jTextArea.setText(null);
 						}
@@ -264,6 +289,23 @@ public class Empathybox {
 		}
 	}
 
+	public void cycleImage() {
+		imageNumber = (imageNumber + 1) % 10;
+		try {
+			BufferedImage image = ImageIO.read(new File(String.format("emotion_images/%d.jpg", imageNumber)).getAbsoluteFile());
+			picLabel.setIcon(new ImageIcon(image.getScaledInstance(525, 525, Image.SCALE_FAST)));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		questionLabel.setText("How does this image make you feel?");
+		reactionLabel.setText("");
+	}
+
+	public void cycleReaction() {
+		String emotions[] = {"Happy", "Sad", "Angry", "Neutral", "Surprised", "Fearfully", "Disgustingly"};
+		questionLabel.setText(String.format("The last person shown this image reacted %s", emotions[r.nextInt(emotions.length)]));
+	}
+
 	public static void main(String[] args) {
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
@@ -278,6 +320,18 @@ public class Empathybox {
 						application.getEmotionFromDB();
 					}
 				},0,1000);
+				t.scheduleAtFixedRate(new TimerTask() {
+					@Override
+					public void run() {
+						application.cycleImage();
+					}
+				}, 10000, 10000);
+				t.scheduleAtFixedRate(new TimerTask() {
+					@Override
+					public void run() {
+						application.cycleReaction();
+					}
+				}, 7000, 10000);
 			}
 		});
 	}
