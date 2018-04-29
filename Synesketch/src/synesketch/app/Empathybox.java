@@ -135,6 +135,13 @@ public class Empathybox {
 			jFrame.requestFocus();
 			KeyboardFocusManager manager = KeyboardFocusManager.getCurrentKeyboardFocusManager();
 			manager.addKeyEventDispatcher(new MyDispatcher());
+
+			try {
+				MongoCollection<Document> localImageCol = localDB.getCollection("image");
+				localImageCol.updateOne(new Document(), new Document("$set", new Document("num", imageNumber).append("captured", false)), new UpdateOptions().upsert(true));
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 		return jFrame;
 	}
@@ -279,9 +286,9 @@ public class Empathybox {
 
 	public void getEmotionFromDB() {
 		try {
-			MongoCollection<Document> request = remoteDB.getCollection("image");
-			Document req = request.find().first();
-			if (req != null && req.getInteger("num") == imageNumber && req.getBoolean("captured")) {
+//			MongoCollection<Document> request = remoteDB.getCollection("image");
+//			Document req = request.find().first();
+//			if (req != null && req.getInteger("num") == imageNumber && req.getBoolean("captured")) {
 				String text = "neutral";
 				System.out.println("Requesting Emotion from DB");
 				try {
@@ -301,7 +308,7 @@ public class Empathybox {
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
-			}
+//			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

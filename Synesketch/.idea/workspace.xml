@@ -15,16 +15,9 @@
       <file leaf-file-name="Empathybox.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/synesketch/app/Empathybox.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="245">
-              <caret line="312" column="84" lean-forward="false" selection-start-line="312" selection-start-column="77" selection-end-line="312" selection-end-column="84" />
-              <folding>
-                <element signature="e#5509#6498#0" expanded="true" />
-                <element signature="e#6497#6498#0" expanded="true" />
-                <element signature="e#12241#12349#0" expanded="true" />
-                <element signature="e#12348#12349#0" expanded="true" />
-                <element signature="e#12384#12486#0" expanded="true" />
-                <element signature="e#12485#12486#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="235">
+              <caret line="327" column="49" lean-forward="true" selection-start-line="327" selection-start-column="49" selection-end-line="327" selection-end-column="49" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -89,10 +82,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scratches" />
-      <pane id="PackagesPane" />
-      <pane id="AndroidView" />
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -122,7 +111,14 @@
           <select />
         </subPane>
       </pane>
+      <pane id="AndroidView" />
+      <pane id="PackagesPane" />
+      <pane id="Scope" />
+      <pane id="Scratches" />
     </panes>
+  </component>
+  <component name="PropertiesComponent">
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -293,14 +289,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="e#5509#6498#0" expanded="true" />
-            <element signature="e#6497#6498#0" expanded="true" />
-            <element signature="e#12241#12349#0" expanded="true" />
-            <element signature="e#12348#12349#0" expanded="true" />
-            <element signature="e#12384#12486#0" expanded="true" />
-            <element signature="e#12485#12486#0" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -315,14 +304,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="e#5509#6498#0" expanded="true" />
-            <element signature="e#6497#6498#0" expanded="true" />
-            <element signature="e#12241#12349#0" expanded="true" />
-            <element signature="e#12348#12349#0" expanded="true" />
-            <element signature="e#12384#12486#0" expanded="true" />
-            <element signature="e#12485#12486#0" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -330,14 +312,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="e#5509#6498#0" expanded="true" />
-            <element signature="e#6497#6498#0" expanded="true" />
-            <element signature="e#12241#12349#0" expanded="true" />
-            <element signature="e#12348#12349#0" expanded="true" />
-            <element signature="e#12384#12486#0" expanded="true" />
-            <element signature="e#12485#12486#0" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -345,14 +320,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="e#5509#6498#0" expanded="true" />
-            <element signature="e#6497#6498#0" expanded="true" />
-            <element signature="e#12241#12349#0" expanded="true" />
-            <element signature="e#12348#12349#0" expanded="true" />
-            <element signature="e#12384#12486#0" expanded="true" />
-            <element signature="e#12485#12486#0" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -360,14 +328,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="e#5509#6498#0" expanded="true" />
-            <element signature="e#6497#6498#0" expanded="true" />
-            <element signature="e#12241#12349#0" expanded="true" />
-            <element signature="e#12348#12349#0" expanded="true" />
-            <element signature="e#12384#12486#0" expanded="true" />
-            <element signature="e#12485#12486#0" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -541,16 +502,9 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/synesketch/app/Empathybox.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="245">
-          <caret line="312" column="84" lean-forward="false" selection-start-line="312" selection-start-column="77" selection-end-line="312" selection-end-column="84" />
-          <folding>
-            <element signature="e#5509#6498#0" expanded="true" />
-            <element signature="e#6497#6498#0" expanded="true" />
-            <element signature="e#12241#12349#0" expanded="true" />
-            <element signature="e#12348#12349#0" expanded="true" />
-            <element signature="e#12384#12486#0" expanded="true" />
-            <element signature="e#12485#12486#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="235">
+          <caret line="327" column="49" lean-forward="true" selection-start-line="327" selection-start-column="49" selection-end-line="327" selection-end-column="49" />
+          <folding />
         </state>
       </provider>
     </entry>
