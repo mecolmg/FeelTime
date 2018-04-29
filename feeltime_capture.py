@@ -34,6 +34,7 @@ while True:
   if not req or not req['flag']:
     time.sleep(1)
   else:
+    db.request.update({}, {"$set": {"flag":False}}, upsert=True)
     print "HERE"
     cv2.imwrite("tmp_image.jpg", frame)
     image = open("tmp_image.jpg", "rb")
@@ -60,7 +61,6 @@ while True:
         # yidx += 1
       db.emotion.update({}, {"Emotion":maxem, "Value":maxval}, upsert=True)
       db.image.update({}, {"$set":{"num": req['num'], "captured": True}}, upsert=True)
-      db.request.update({}, {"$set": {"flag":False}}, upsert=True)
       history = db.history.find_one()
       counts = {emotion:0 for emotion in emotions}
       for emotion in emotions:
