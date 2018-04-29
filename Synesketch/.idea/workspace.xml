@@ -15,8 +15,8 @@
       <file leaf-file-name="Empathybox.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/synesketch/app/Empathybox.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="124">
-              <caret line="344" column="71" lean-forward="false" selection-start-line="344" selection-start-column="71" selection-end-line="344" selection-end-column="71" />
+            <state relative-caret-position="171">
+              <caret line="312" column="84" lean-forward="false" selection-start-line="312" selection-start-column="77" selection-end-line="312" selection-end-column="84" />
               <folding>
                 <element signature="e#5509#6498#0" expanded="true" />
                 <element signature="e#6497#6498#0" expanded="true" />
@@ -52,6 +52,7 @@
       <find>currentEmotion</find>
       <find>capture</find>
       <find>remoteDb</find>
+      <find>&quot;image&quot;</find>
     </findStrings>
   </component>
   <component name="GradleLocalSettings">
@@ -540,8 +541,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/synesketch/app/Empathybox.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="124">
-          <caret line="344" column="71" lean-forward="false" selection-start-line="344" selection-start-column="71" selection-end-line="344" selection-end-column="71" />
+        <state relative-caret-position="171">
+          <caret line="312" column="84" lean-forward="false" selection-start-line="312" selection-start-column="77" selection-end-line="312" selection-end-column="84" />
           <folding>
             <element signature="e#5509#6498#0" expanded="true" />
             <element signature="e#6497#6498#0" expanded="true" />
