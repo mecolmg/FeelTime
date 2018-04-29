@@ -78,7 +78,7 @@ public class Empathybox {
 			if (e.getID() == KeyEvent.KEY_PRESSED) {
 				if (e.getKeyCode() == KeyEvent.VK_ENTER || e.getKeyCode() == KeyEvent.VK_SPACE) {
 					MongoCollection<Document> request = localDB.getCollection("request");
-					request.updateOne(new Document(), new Document("$set", new Document("flag", true)), new UpdateOptions().upsert(true));
+					request.updateOne(new Document(), new Document("$set", new Document("flag", true).append("num", imageNumber)), new UpdateOptions().upsert(true));
 					cycleReaction();
 				}
 			} else if (e.getID() == KeyEvent.KEY_RELEASED) {
@@ -342,7 +342,7 @@ public class Empathybox {
 		}
 		try {
 			MongoCollection<Document> history = remoteDB.getCollection("history");
-			Document req = history.find().first();
+			Document req = history.find(new Document("num", imageNumber)).first();
 			if (req != null) {
 				for (String emotion: emotions) {
 					if (req.containsKey(emotion)) {

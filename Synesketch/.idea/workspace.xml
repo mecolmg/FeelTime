@@ -11,13 +11,20 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="FileEditorManager">
-    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+    <leaf>
       <file leaf-file-name="Empathybox.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/synesketch/app/Empathybox.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="450">
-              <caret line="68" column="55" lean-forward="true" selection-start-line="68" selection-start-column="55" selection-end-line="68" selection-end-column="55" />
-              <folding />
+            <state relative-caret-position="124">
+              <caret line="344" column="71" lean-forward="false" selection-start-line="344" selection-start-column="71" selection-end-line="344" selection-end-column="71" />
+              <folding>
+                <element signature="e#5509#6498#0" expanded="true" />
+                <element signature="e#6497#6498#0" expanded="true" />
+                <element signature="e#12241#12349#0" expanded="true" />
+                <element signature="e#12348#12349#0" expanded="true" />
+                <element signature="e#12384#12486#0" expanded="true" />
+                <element signature="e#12485#12486#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -81,9 +88,10 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scratches" />
+      <pane id="PackagesPane" />
       <pane id="AndroidView" />
       <pane id="Scope" />
-      <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -113,7 +121,6 @@
           <select />
         </subPane>
       </pane>
-      <pane id="Scratches" />
     </panes>
   </component>
   <component name="RunDashboard">
@@ -285,7 +292,14 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
+          <folding>
+            <element signature="e#5509#6498#0" expanded="true" />
+            <element signature="e#6497#6498#0" expanded="true" />
+            <element signature="e#12241#12349#0" expanded="true" />
+            <element signature="e#12348#12349#0" expanded="true" />
+            <element signature="e#12384#12486#0" expanded="true" />
+            <element signature="e#12485#12486#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -293,7 +307,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1230">
           <caret line="109" column="29" lean-forward="true" selection-start-line="109" selection-start-column="29" selection-end-line="109" selection-end-column="29" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -301,7 +314,14 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
+          <folding>
+            <element signature="e#5509#6498#0" expanded="true" />
+            <element signature="e#6497#6498#0" expanded="true" />
+            <element signature="e#12241#12349#0" expanded="true" />
+            <element signature="e#12348#12349#0" expanded="true" />
+            <element signature="e#12384#12486#0" expanded="true" />
+            <element signature="e#12485#12486#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -309,7 +329,14 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
+          <folding>
+            <element signature="e#5509#6498#0" expanded="true" />
+            <element signature="e#6497#6498#0" expanded="true" />
+            <element signature="e#12241#12349#0" expanded="true" />
+            <element signature="e#12348#12349#0" expanded="true" />
+            <element signature="e#12384#12486#0" expanded="true" />
+            <element signature="e#12485#12486#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -317,7 +344,14 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
+          <folding>
+            <element signature="e#5509#6498#0" expanded="true" />
+            <element signature="e#6497#6498#0" expanded="true" />
+            <element signature="e#12241#12349#0" expanded="true" />
+            <element signature="e#12348#12349#0" expanded="true" />
+            <element signature="e#12384#12486#0" expanded="true" />
+            <element signature="e#12485#12486#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -325,7 +359,14 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
+          <folding>
+            <element signature="e#5509#6498#0" expanded="true" />
+            <element signature="e#6497#6498#0" expanded="true" />
+            <element signature="e#12241#12349#0" expanded="true" />
+            <element signature="e#12348#12349#0" expanded="true" />
+            <element signature="e#12384#12486#0" expanded="true" />
+            <element signature="e#12485#12486#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -382,10 +423,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="192">
           <caret line="147" column="19" lean-forward="false" selection-start-line="147" selection-start-column="19" selection-end-line="147" selection-end-column="19" />
-          <folding>
-            <element signature="e#5748#5749#0" expanded="false" />
-            <element signature="e#5784#5785#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -498,15 +535,21 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="92">
           <caret line="94" column="0" lean-forward="false" selection-start-line="94" selection-start-column="0" selection-end-line="94" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/synesketch/app/Empathybox.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="450">
-          <caret line="68" column="55" lean-forward="true" selection-start-line="68" selection-start-column="55" selection-end-line="68" selection-end-column="55" />
-          <folding />
+        <state relative-caret-position="124">
+          <caret line="344" column="71" lean-forward="false" selection-start-line="344" selection-start-column="71" selection-end-line="344" selection-end-column="71" />
+          <folding>
+            <element signature="e#5509#6498#0" expanded="true" />
+            <element signature="e#6497#6498#0" expanded="true" />
+            <element signature="e#12241#12349#0" expanded="true" />
+            <element signature="e#12348#12349#0" expanded="true" />
+            <element signature="e#12384#12486#0" expanded="true" />
+            <element signature="e#12485#12486#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
