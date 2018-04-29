@@ -10,7 +10,6 @@ import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.net.URL;
 
 import javax.imageio.ImageIO;
 import javax.sound.sampled.AudioInputStream;
@@ -21,8 +20,9 @@ import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.*;
 
-import javafx.application.Application;
-import org.w3c.dom.css.Rect;
+import com.mongodb.client.model.UpdateOptions;
+import com.mongodb.client.model.Filters;
+import org.bson.BSON;
 import synesketch.gui.EmpathyPanel;
 
 import javax.swing.JScrollPane;
@@ -30,11 +30,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.BorderFactory;
 import javax.swing.border.BevelBorder;
-import javax.swing.border.LineBorder;
 
 import com.mongodb.MongoClient;
-import com.mongodb.MongoClientURI;
-import com.mongodb.ServerAddress;
 
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.MongoCollection;
@@ -42,16 +39,7 @@ import com.mongodb.client.MongoCollection;
 import org.bson.Document;
 
 import java.util.*;
-import java.util.List;
 import java.util.Timer;
-
-import com.mongodb.Block;
-
-import com.mongodb.client.MongoCursor;
-import static com.mongodb.client.model.Filters.*;
-import com.mongodb.client.result.DeleteResult;
-import static com.mongodb.client.model.Updates.*;
-import com.mongodb.client.result.UpdateResult;
 
 public class Empathybox {
 
@@ -70,17 +58,35 @@ public class Empathybox {
 	private Random r = new Random();
 
 
-
-	private int dim = 900;
+	private int dim = 1040;
 	
 	private Clip c = null;
 
-	private MongoClient mongoClient = new MongoClient( "localhost" , 27017 );
-	private MongoDatabase database = mongoClient.getDatabase("feeltime");
+	private MongoClient localClient = new MongoClient( "localhost" , 27017 );
+	private MongoClient remoteClient = new MongoClient( "172.29.82.98" , 27017 );
+	private MongoDatabase localDB = localClient.getDatabase("feeltime");
+	private MongoDatabase remoteDB = remoteClient.getDatabase("feeltime");
 	private GraphicsDevice device = GraphicsEnvironment
 			.getLocalGraphicsEnvironment().getScreenDevices()[0];
-	
-	String currentEmotion = "";
+
+	String emotions[] = {"Happy", "Sad", "Angry", "Neutral", "Surprised", "Fearfully", "Disgustingly"};
+	String currentEmotion = "Neutral";
+
+	private class MyDispatcher implements KeyEventDispatcher {
+		@Override
+		public boolean dispatchKeyEvent(KeyEvent e) {
+			if (e.getID() == KeyEvent.KEY_PRESSED) {
+				if (e.getKeyCode() == KeyEvent.VK_ENTER || e.getKeyCode() == KeyEvent.VK_SPACE) {
+					MongoCollection<Document> request = localDB.getCollection("request");
+					request.updateOne(new Document(), new Document("$set", new Document("flag", true)), new UpdateOptions().upsert(true));
+					cycleReaction();
+				}
+			} else if (e.getID() == KeyEvent.KEY_RELEASED) {
+			} else if (e.getID() == KeyEvent.KEY_TYPED) {
+			}
+			return false;
+		}
+	}
 	
 	public Empathybox() {
 		initialPlaySound();
@@ -125,6 +131,10 @@ public class Empathybox {
 			jFrame.add(getAppletPanel(), BorderLayout.LINE_START);
 			jFrame.add(sidePanel, BorderLayout.CENTER);
 			jFrame.setTitle("FeelTime");
+			jFrame.setFocusable(true);
+			jFrame.requestFocus();
+			KeyboardFocusManager manager = KeyboardFocusManager.getCurrentKeyboardFocusManager();
+			manager.addKeyEventDispatcher(new MyDispatcher());
 		}
 		return jFrame;
 	}
@@ -173,7 +183,7 @@ public class Empathybox {
 					try {
 						if (e.getKeyCode() == KeyEvent.VK_ENTER) {
 							System.out.println("Requesting Emotion");
-							MongoCollection<Document> collection = database.getCollection("display1");
+							MongoCollection<Document> collection = remoteDB.getCollection("display1");
 							Document req = collection.find().first();
 							System.out.println(req);
 							String text = req.get("Emotion").toString();
@@ -268,21 +278,29 @@ public class Empathybox {
 	}
 
 	public void getEmotionFromDB() {
-		String text = "disgust";
-		System.out.println("Requesting Emotion from DB");
 		try {
-			MongoCollection<Document> collection = database.getCollection("display1");
-			Document req = collection.find().first();
-			text = req.get("Emotion").toString();
-		} catch (Exception e) {
-			System.err.println("Couldn't connect to DB");
-		}
-		try {
-			appletPanel.fireSynesthesiator(text);
-			System.out.println("current emotion:" + currentEmotion + "  text: " + text);
-			if (currentEmotion.equals("") || !text.equals(currentEmotion)) {
-				currentEmotion = text;	
-				playSound(text);
+			MongoCollection<Document> request = remoteDB.getCollection("image");
+			Document req = request.find().first();
+			if (req != null && req.getInteger("num") == imageNumber && req.getBoolean("captured")) {
+				String text = "neutral";
+				System.out.println("Requesting Emotion from DB");
+				try {
+					MongoCollection<Document> collection = remoteDB.getCollection("emotion");
+					Document emotionReq = collection.find().first();
+					text = emotionReq.get("Emotion").toString();
+				} catch (Exception e) {
+					System.err.println("Couldn't connect to DB");
+				}
+				try {
+					appletPanel.fireSynesthesiator(text);
+					System.out.println("current emotion:" + currentEmotion + "  text: " + text);
+					if (currentEmotion.equals("") || !text.equals(currentEmotion)) {
+						currentEmotion = text;
+						playSound(text);
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -290,20 +308,69 @@ public class Empathybox {
 	}
 
 	public void cycleImage() {
-		imageNumber = (imageNumber + 1) % 10;
+		try {
+			MongoCollection<Document> localImageCol = localDB.getCollection("image");
+			MongoCollection<Document> remoteImageCol = localDB.getCollection("image");
+			Document localImage = localImageCol.find().first();
+			Document remoteImage = remoteImageCol.find().first();
+			if (localImage != null && remoteImage != null) {
+				if (!localImage.getInteger("num").equals(remoteImage.getInteger("num"))) {
+					imageNumber = remoteImage.getInteger("num");
+					localImageCol.updateOne(new Document(), new Document("$set", new Document("num", imageNumber).append("captured", false)), new UpdateOptions().upsert(true));
+					questionLabel.setText("How does this image make you feel?");
+				} else if (localImage.getBoolean("captured") && remoteImage.getBoolean("captured")) {
+					imageNumber = (imageNumber + 1) % 10;
+					localImageCol.updateOne(new Document(), new Document("$set", new Document("num", imageNumber).append("captured", false)), new UpdateOptions().upsert(true));
+					questionLabel.setText("How does this image make you feel?");
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		try {
 			BufferedImage image = ImageIO.read(new File(String.format("emotion_images/%d.jpg", imageNumber)).getAbsoluteFile());
 			picLabel.setIcon(new ImageIcon(image.getScaledInstance(525, 525, Image.SCALE_FAST)));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		questionLabel.setText("How does this image make you feel?");
-		reactionLabel.setText("");
 	}
 
 	public void cycleReaction() {
-		String emotions[] = {"Happy", "Sad", "Angry", "Neutral", "Surprised", "Fearfully", "Disgustingly"};
-		questionLabel.setText(String.format("The last person shown this image reacted %s", emotions[r.nextInt(emotions.length)]));
+		HashMap<String, Integer> counts = new HashMap<>();
+		for (String emotion: emotions) {
+			counts.put(emotion, 0);
+		}
+		try {
+			MongoCollection<Document> history = remoteDB.getCollection("history");
+			Document req = history.find().first();
+			if (req != null) {
+				for (String emotion: emotions) {
+					if (req.containsKey(emotion)) {
+						counts.put(emotion, req.getInteger(emotion));
+					}
+				}
+			}
+			history = localDB.getCollection("history");
+			req = history.find().first();
+			if (req != null) {
+				for (String emotion: emotions) {
+					if (req.containsKey(emotion)) {
+						counts.put(emotion, counts.get(emotion) + req.getInteger(emotion));
+					}
+				}
+			}
+		} catch (Exception e) {
+			System.err.println("Couldn't connect to DB");
+		}
+		String mostCommon = "Neutral";
+		int largest = 0;
+		for (String emotion: emotions) {
+			if (counts.get(emotion) > largest) {
+				largest = counts.get(emotion);
+				mostCommon = emotion;
+			}
+		}
+		questionLabel.setText(String.format("Most people shown this image reacted %s", mostCommon));
 	}
 
 	public static void main(String[] args) {
@@ -319,19 +386,19 @@ public class Empathybox {
 					public void run() {
 						application.getEmotionFromDB();
 					}
-				},0,1000);
+				},0,100);
 				t.scheduleAtFixedRate(new TimerTask() {
 					@Override
 					public void run() {
 						application.cycleImage();
 					}
-				}, 10000, 10000);
-				t.scheduleAtFixedRate(new TimerTask() {
-					@Override
-					public void run() {
-						application.cycleReaction();
-					}
-				}, 7000, 10000);
+				}, 0, 100);
+//				t.scheduleAtFixedRate(new TimerTask() {
+//					@Override
+//					public void run() {
+//						application.cycleReaction();
+//					}
+//				}, 7000, 10000);
 			}
 		});
 	}
