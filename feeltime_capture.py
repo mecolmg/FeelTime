@@ -61,7 +61,7 @@ while True:
         # yidx += 1
       db.emotion.update({}, {"Emotion":maxem, "Value":maxval}, upsert=True)
       db.image.update({}, {"$set":{"num": req['num'], "captured": True}}, upsert=True)
-      history = db.history.find_one()
+      history = db.history.find_one({"num": req['num']})
       counts = {emotion:0 for emotion in emotions}
       for emotion in emotions:
         if history and history[emotion]:

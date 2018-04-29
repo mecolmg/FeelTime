@@ -59,6 +59,7 @@ public class Empathybox {
 
 
 	private int dim = 1040;
+	private int image_size = 800;
 	
 	private Clip c = null;
 
@@ -114,7 +115,7 @@ public class Empathybox {
 			picLabel.setHorizontalAlignment(JLabel.CENTER);
 			try {
 				image = ImageIO.read(new File("emotion_images/0.jpg").getAbsoluteFile());
-				picLabel.setIcon(new ImageIcon(image.getScaledInstance(525, 525, Image.SCALE_FAST)));
+				picLabel.setIcon(new ImageIcon(image.getScaledInstance(image_size, image_size, Image.SCALE_FAST)));
 				sidePanel.add(picLabel, BorderLayout.PAGE_START);
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -317,17 +318,20 @@ public class Empathybox {
 	public void cycleImage() {
 		try {
 			MongoCollection<Document> localImageCol = localDB.getCollection("image");
-			MongoCollection<Document> remoteImageCol = localDB.getCollection("image");
+			MongoCollection<Document> remoteImageCol = remoteDB.getCollection("image");
 			Document localImage = localImageCol.find().first();
 			Document remoteImage = remoteImageCol.find().first();
 			if (localImage != null && remoteImage != null) {
-				if (!localImage.getInteger("num").equals(remoteImage.getInteger("num"))) {
+				System.out.printf("%d %d\n", localImage.getInteger("num"), remoteImage.getInteger("num"));
+				if (localImage.getInteger("num") != remoteImage.getInteger("num")) {
 					imageNumber = remoteImage.getInteger("num");
 					localImageCol.updateOne(new Document(), new Document("$set", new Document("num", imageNumber).append("captured", false)), new UpdateOptions().upsert(true));
+					Thread.sleep(3000);
 					questionLabel.setText("How does this image make you feel?");
 				} else if (localImage.getBoolean("captured") && remoteImage.getBoolean("captured")) {
 					imageNumber = (imageNumber + 1) % 10;
 					localImageCol.updateOne(new Document(), new Document("$set", new Document("num", imageNumber).append("captured", false)), new UpdateOptions().upsert(true));
+					Thread.sleep(3000);
 					questionLabel.setText("How does this image make you feel?");
 				}
 			}
@@ -336,7 +340,7 @@ public class Empathybox {
 		}
 		try {
 			BufferedImage image = ImageIO.read(new File(String.format("emotion_images/%d.jpg", imageNumber)).getAbsoluteFile());
-			picLabel.setIcon(new ImageIcon(image.getScaledInstance(525, 525, Image.SCALE_FAST)));
+			picLabel.setIcon(new ImageIcon(image.getScaledInstance(image_size, image_size, Image.SCALE_FAST)));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
